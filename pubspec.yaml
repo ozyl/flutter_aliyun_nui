@@ -43,6 +43,9 @@ flutter:
       android:
         package: com.example.flutter_aliyun_nui
         pluginClass: FlutterAliyunNuiPlugin
+      ios:
+        pluginClass: FlutterAliyunNuiPlugin
+
     # -------------------
 
   # To add assets to your plugin package, add an assets section, like this:

@@ -1,0 +1,10 @@
+framework module nuisdk {
+  umbrella header "nuisdk.h"
+  
+  export *
+  module * { export * }
+  
+  link "c++"
+  link "iconv"
+}
+
