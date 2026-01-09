@@ -166,7 +166,6 @@ struct AsrResult: Hashable {
   var resultCode: Int64
   var asrResult: String
   var allResponse: String
-  var value: Int64
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -175,14 +174,12 @@ struct AsrResult: Hashable {
     let resultCode = pigeonVar_list[1] as! Int64
     let asrResult = pigeonVar_list[2] as! String
     let allResponse = pigeonVar_list[3] as! String
-    let value = pigeonVar_list[4] as! Int64
 
     return AsrResult(
       finish: finish,
       resultCode: resultCode,
       asrResult: asrResult,
-      allResponse: allResponse,
-      value: value
+      allResponse: allResponse
     )
   }
   func toList() -> [Any?] {
@@ -191,7 +188,6 @@ struct AsrResult: Hashable {
       resultCode,
       asrResult,
       allResponse,
-      value,
     ]
   }
   static func == (lhs: AsrResult, rhs: AsrResult) -> Bool {
@@ -266,7 +262,6 @@ class FlutterAliyunNuiHostApiPigeonCodec: FlutterStandardMessageCodec, @unchecke
 
 /// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
 protocol FlutterAliyunNuiCallbackProtocol {
-  func onNuiNeedAudioData(buffer bufferArg: FlutterStandardTypedData, length lengthArg: Int64, completion: @escaping (Result<Int64, PigeonError>) -> Void)
   func onNuiAudioStateChanged(state stateArg: AudioState, completion: @escaping (Result<Void, PigeonError>) -> Void)
   func onNuiEventCallback(event eventArg: String, resultCode resultCodeArg: Int64, kwsResult kwsResultArg: String, asrResult asrResultArg: String, completion: @escaping (Result<Void, PigeonError>) -> Void)
 }
@@ -279,27 +274,6 @@ class FlutterAliyunNuiCallback: FlutterAliyunNuiCallbackProtocol {
   }
   var codec: FlutterAliyunNuiHostApiPigeonCodec {
     return FlutterAliyunNuiHostApiPigeonCodec.shared
-  }
-  func onNuiNeedAudioData(buffer bufferArg: FlutterStandardTypedData, length lengthArg: Int64, completion: @escaping (Result<Int64, PigeonError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.flutter_aliyun_nui.FlutterAliyunNuiCallback.onNuiNeedAudioData\(messageChannelSuffix)"
-    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([bufferArg, lengthArg] as [Any?]) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
-      }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(PigeonError(code: code, message: message, details: details)))
-      } else if listResponse[0] == nil {
-        completion(.failure(PigeonError(code: "null-error", message: "Flutter api returned null value for non-null return value.", details: "")))
-      } else {
-        let result = listResponse[0] as! Int64
-        completion(.success(result))
-      }
-    }
   }
   func onNuiAudioStateChanged(state stateArg: AudioState, completion: @escaping (Result<Void, PigeonError>) -> Void) {
     let channelName: String = "dev.flutter.pigeon.flutter_aliyun_nui.FlutterAliyunNuiCallback.onNuiAudioStateChanged\(messageChannelSuffix)"
@@ -345,7 +319,6 @@ protocol FlutterAliyunNuiHostApi {
   func startDialog(mode: VadMode, params: [String: Any?]) throws -> Int64
   func release() throws -> Int64
   func cancelDialog() throws -> Int64
-  func resumeDialog() throws -> Int64
   func stopDialog() throws -> Int64
 }
 
@@ -428,19 +401,6 @@ class FlutterAliyunNuiHostApiSetup {
       }
     } else {
       cancelDialogChannel.setMessageHandler(nil)
-    }
-    let resumeDialogChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_aliyun_nui.FlutterAliyunNuiHostApi.resumeDialog\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      resumeDialogChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.resumeDialog()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      resumeDialogChannel.setMessageHandler(nil)
     }
     let stopDialogChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_aliyun_nui.FlutterAliyunNuiHostApi.stopDialog\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

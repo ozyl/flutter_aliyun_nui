@@ -17,6 +17,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  permission_handler: ^12.0.1
+
   flutter_aliyun_nui:
     # When depending on this package from a real application you should use:
     #   flutter_aliyun_nui: ^x.y.z
@@ -28,6 +30,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  device_info_plus: ^12.3.0
 
 dev_dependencies:
   integration_test:

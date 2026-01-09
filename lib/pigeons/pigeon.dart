@@ -73,7 +73,6 @@ class AsrResult {
     required this.resultCode,
     required this.asrResult,
     required this.allResponse,
-    required this.value,
   });
 
   bool finish;
@@ -84,15 +83,12 @@ class AsrResult {
 
   String allResponse;
 
-  int value;
-
   List<Object?> _toList() {
     return <Object?>[
       finish,
       resultCode,
       asrResult,
       allResponse,
-      value,
     ];
   }
 
@@ -106,7 +102,6 @@ class AsrResult {
       resultCode: result[1]! as int,
       asrResult: result[2]! as String,
       allResponse: result[3]! as String,
-      value: result[4]! as int,
     );
   }
 
@@ -176,42 +171,12 @@ class _PigeonCodec extends StandardMessageCodec {
 abstract class FlutterAliyunNuiCallback {
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
-  int onNuiNeedAudioData(Uint8List buffer, int length);
-
   void onNuiAudioStateChanged(AudioState state);
 
   void onNuiEventCallback(String event, int resultCode, String kwsResult, String asrResult);
 
   static void setUp(FlutterAliyunNuiCallback? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
     messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-    {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.flutter_aliyun_nui.FlutterAliyunNuiCallback.onNuiNeedAudioData$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
-      if (api == null) {
-        pigeonVar_channel.setMessageHandler(null);
-      } else {
-        pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.flutter_aliyun_nui.FlutterAliyunNuiCallback.onNuiNeedAudioData was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final Uint8List? arg_buffer = (args[0] as Uint8List?);
-          assert(arg_buffer != null,
-              'Argument for dev.flutter.pigeon.flutter_aliyun_nui.FlutterAliyunNuiCallback.onNuiNeedAudioData was null, expected non-null Uint8List.');
-          final int? arg_length = (args[1] as int?);
-          assert(arg_length != null,
-              'Argument for dev.flutter.pigeon.flutter_aliyun_nui.FlutterAliyunNuiCallback.onNuiNeedAudioData was null, expected non-null int.');
-          try {
-            final int output = api.onNuiNeedAudioData(arg_buffer!, arg_length!);
-            return wrapResponse(result: output);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
-          }
-        });
-      }
-    }
     {
       final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
           'dev.flutter.pigeon.flutter_aliyun_nui.FlutterAliyunNuiCallback.onNuiAudioStateChanged$messageChannelSuffix', pigeonChannelCodec,
@@ -401,34 +366,6 @@ class FlutterAliyunNuiHostApi {
 
   Future<int> cancelDialog() async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_aliyun_nui.FlutterAliyunNuiHostApi.cancelDialog$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else if (pigeonVar_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (pigeonVar_replyList[0] as int?)!;
-    }
-  }
-
-  Future<int> resumeDialog() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_aliyun_nui.FlutterAliyunNuiHostApi.resumeDialog$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,

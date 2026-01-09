@@ -132,8 +132,7 @@ data class AsrResult (
   val finish: Boolean,
   val resultCode: Long,
   val asrResult: String,
-  val allResponse: String,
-  val value: Long
+  val allResponse: String
 )
  {
   companion object {
@@ -142,8 +141,7 @@ data class AsrResult (
       val resultCode = pigeonVar_list[1] as Long
       val asrResult = pigeonVar_list[2] as String
       val allResponse = pigeonVar_list[3] as String
-      val value = pigeonVar_list[4] as Long
-      return AsrResult(finish, resultCode, asrResult, allResponse, value)
+      return AsrResult(finish, resultCode, asrResult, allResponse)
     }
   }
   fun toList(): List<Any?> {
@@ -152,7 +150,6 @@ data class AsrResult (
       resultCode,
       asrResult,
       allResponse,
-      value,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -223,26 +220,6 @@ class FlutterAliyunNuiCallback(private val binaryMessenger: BinaryMessenger, pri
       FlutterAliyunNuiHostApiPigeonCodec()
     }
   }
-  fun onNuiNeedAudioData(bufferArg: ByteArray, lengthArg: Long, callback: (Result<Long>) -> Unit)
-{
-    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.flutter_aliyun_nui.FlutterAliyunNuiCallback.onNuiNeedAudioData$separatedMessageChannelSuffix"
-    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(bufferArg, lengthArg)) {
-      if (it is List<*>) {
-        if (it.size > 1) {
-          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
-        } else if (it[0] == null) {
-          callback(Result.failure(FlutterError("null-error", "Flutter api returned null value for non-null return value.", "")))
-        } else {
-          val output = it[0] as Long
-          callback(Result.success(output))
-        }
-      } else {
-        callback(Result.failure(FlutterAliyunNuiHostApiPigeonUtils.createConnectionError(channelName)))
-      } 
-    }
-  }
   fun onNuiAudioStateChanged(stateArg: AudioState, callback: (Result<Unit>) -> Unit)
 {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
@@ -285,7 +262,6 @@ interface FlutterAliyunNuiHostApi {
   fun startDialog(mode: VadMode, params: Map<String, Any?>): Long
   fun release(): Long
   fun cancelDialog(): Long
-  fun resumeDialog(): Long
   fun stopDialog(): Long
 
   companion object {
@@ -372,21 +348,6 @@ interface FlutterAliyunNuiHostApi {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
               listOf(api.cancelDialog())
-            } catch (exception: Throwable) {
-              FlutterAliyunNuiHostApiPigeonUtils.wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_aliyun_nui.FlutterAliyunNuiHostApi.resumeDialog$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf(api.resumeDialog())
             } catch (exception: Throwable) {
               FlutterAliyunNuiHostApiPigeonUtils.wrapError(exception)
             }

@@ -6,8 +6,7 @@ import 'package:pigeon/pigeon.dart'
         KotlinOptions,
         PigeonOptions,
         SwiftOptions,
-        FlutterApi,
-        Uint8List;
+        FlutterApi;
 
 @ConfigurePigeon(
   PigeonOptions(
@@ -23,6 +22,28 @@ import 'package:pigeon/pigeon.dart'
 )
 enum AudioState { stateOpen, statePause, stateClose }
 
+enum LogLevel {
+  logLevelVerbose,
+  logLevelDebug,
+  logLevelInfo,
+  logLevelWarning,
+  logLevelError,
+  logLevelNone,
+}
+
+enum VadMode {
+  typeUnknown,
+  typeVad,
+  typeP2t,
+  typeKws,
+  typeParallel,
+  typeKws2Parallel,
+  typeAutoContinual,
+  typeKwsContinual,
+  typeKws2Talk,
+  typeOnlyKws,
+}
+
 class AsrResult {
   bool finish;
   int resultCode;
@@ -37,35 +58,9 @@ class AsrResult {
   });
 }
 
-enum LogLevel {
-  logLevelVerbose,
-  logLevelDebug,
-  logLevelInfo,
-  logLevelWarning,
-  logLevelError,
-  logLevelNone,
-}
-
-enum VadMode {
-  typeUnknown(-1),
-  typeVad(0),
-  typeP2t(1),
-  typeKws(2),
-  typeParallel(3),
-  typeKws2Parallel(4),
-  typeAutoContinual(5),
-  typeKwsContinual(6),
-  typeKws2Talk(7),
-  typeOnlyKws(8);
-
-  final int value;
-  const VadMode(this.value);
-}
-
 // 2. 原生回调 Flutter 的接口 (Event Callback)
 @FlutterApi()
 abstract class FlutterAliyunNuiCallback {
-  int onNuiNeedAudioData(Uint8List buffer, int length);
   void onNuiAudioStateChanged(AudioState state);
   void onNuiEventCallback(
     String event,
@@ -89,6 +84,5 @@ abstract class FlutterAliyunNuiHostApi {
 
   int release();
   int cancelDialog();
-  int resumeDialog();
   int stopDialog();
 }
