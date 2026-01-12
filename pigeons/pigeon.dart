@@ -44,20 +44,6 @@ enum VadMode {
   typeOnlyKws,
 }
 
-class AsrResult {
-  bool finish;
-  int resultCode;
-  String asrResult;
-  String allResponse;
-
-  AsrResult({
-    required this.finish,
-    required this.resultCode,
-    required this.asrResult,
-    required this.allResponse,
-  });
-}
-
 // 2. 原生回调 Flutter 的接口 (Event Callback)
 @FlutterApi()
 abstract class FlutterAliyunNuiCallback {

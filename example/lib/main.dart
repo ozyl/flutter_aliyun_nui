@@ -25,8 +25,6 @@ class _MyAppState extends State<MyApp> implements FlutterAliyunNuiCallback {
   @override
   void initState() {
     super.initState();
-    // 设置回调
-    _plugin.setCallback(this);
   }
 
   Future<void> _initPlugin() async {
@@ -51,6 +49,7 @@ class _MyAppState extends State<MyApp> implements FlutterAliyunNuiCallback {
         });
         return;
       }
+      _plugin.release();
       // 初始化（需要根据实际的阿里云 SDK 文档调整参数）
       final result = await _plugin.initialize(
         params: {
@@ -63,6 +62,8 @@ class _MyAppState extends State<MyApp> implements FlutterAliyunNuiCallback {
         logLevel: LogLevel.logLevelInfo,
       );
 
+      // 设置回调
+      _plugin.setCallback(this);
       await _plugin.setParams({
         'nls_config': {
           // 添加对话参数
@@ -144,6 +145,13 @@ class _MyAppState extends State<MyApp> implements FlutterAliyunNuiCallback {
     String kwsResult,
     String asrResult,
   ) {
+    final eventEnum = NuiCallbackEvent.values.firstWhere(
+      (element) => element.name == event,
+    );
+    print('事件回调: event=$event, resultCode=$resultCode');
+    print('关键词识别结果: $kwsResult');
+    print('语音识别结果: $asrResult');
+
     setState(() {
       _result =
           '事件: $event\n'
@@ -151,9 +159,6 @@ class _MyAppState extends State<MyApp> implements FlutterAliyunNuiCallback {
           '关键词: $kwsResult\n'
           'ASR: $asrResult';
     });
-    print('事件回调: event=$event, resultCode=$resultCode');
-    print('关键词识别结果: $kwsResult');
-    print('语音识别结果: $asrResult');
   }
 
   @override

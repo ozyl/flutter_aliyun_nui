@@ -24,20 +24,6 @@ List<Object?> wrapResponse({Object? result, PlatformException? error, bool empty
   }
   return <Object?>[error.code, error.message, error.details];
 }
-bool _deepEquals(Object? a, Object? b) {
-  if (a is List && b is List) {
-    return a.length == b.length &&
-        a.indexed
-        .every(((int, dynamic) item) => _deepEquals(item.$2, b[item.$1]));
-  }
-  if (a is Map && b is Map) {
-    return a.length == b.length && a.entries.every((MapEntry<Object?, Object?> entry) =>
-        (b as Map<Object?, Object?>).containsKey(entry.key) &&
-        _deepEquals(entry.value, b[entry.key]));
-  }
-  return a == b;
-}
-
 
 enum AudioState {
   stateOpen,
@@ -67,62 +53,6 @@ enum VadMode {
   typeOnlyKws,
 }
 
-class AsrResult {
-  AsrResult({
-    required this.finish,
-    required this.resultCode,
-    required this.asrResult,
-    required this.allResponse,
-  });
-
-  bool finish;
-
-  int resultCode;
-
-  String asrResult;
-
-  String allResponse;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      finish,
-      resultCode,
-      asrResult,
-      allResponse,
-    ];
-  }
-
-  Object encode() {
-    return _toList();  }
-
-  static AsrResult decode(Object result) {
-    result as List<Object?>;
-    return AsrResult(
-      finish: result[0]! as bool,
-      resultCode: result[1]! as int,
-      asrResult: result[2]! as String,
-      allResponse: result[3]! as String,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! AsrResult || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return _deepEquals(encode(), other.encode());
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
-}
-
 
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
@@ -140,9 +70,6 @@ class _PigeonCodec extends StandardMessageCodec {
     }    else if (value is VadMode) {
       buffer.putUint8(131);
       writeValue(buffer, value.index);
-    }    else if (value is AsrResult) {
-      buffer.putUint8(132);
-      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -160,8 +87,6 @@ class _PigeonCodec extends StandardMessageCodec {
       case 131: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : VadMode.values[value];
-      case 132: 
-        return AsrResult.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }

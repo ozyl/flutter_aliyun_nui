@@ -149,17 +149,17 @@ class FlutterAliyunNuiPlugin : FlutterPlugin, INativeNuiCallback , FlutterAliyun
 
     override fun onNuiEventCallback(
         p0: Constants.NuiEvent?,
-        p1: Int,
+        resultCode: Int,
         p2: Int,
         p3: KwsResult?,
         p4: AsrResult?
     ) {
 
-        print("event=$p0 resultCode=$p2")
+        print("event=$p0 resultCode=$resultCode")
         postMain {
         getCallback()?.onNuiEventCallback(
             p0?.name ?: "",
-            p2.toLong(),
+            resultCode.toLong(),
             JSONObject.toJSONString(p3),
             JSONObject.toJSONString(p4)
         ) {}}

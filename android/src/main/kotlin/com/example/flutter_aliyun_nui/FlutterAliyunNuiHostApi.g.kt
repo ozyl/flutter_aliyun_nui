@@ -37,36 +37,6 @@ private object FlutterAliyunNuiHostApiPigeonUtils {
       )
     }
   }
-  fun deepEquals(a: Any?, b: Any?): Boolean {
-    if (a is ByteArray && b is ByteArray) {
-        return a.contentEquals(b)
-    }
-    if (a is IntArray && b is IntArray) {
-        return a.contentEquals(b)
-    }
-    if (a is LongArray && b is LongArray) {
-        return a.contentEquals(b)
-    }
-    if (a is DoubleArray && b is DoubleArray) {
-        return a.contentEquals(b)
-    }
-    if (a is Array<*> && b is Array<*>) {
-      return a.size == b.size &&
-          a.indices.all{ deepEquals(a[it], b[it]) }
-    }
-    if (a is List<*> && b is List<*>) {
-      return a.size == b.size &&
-          a.indices.all{ deepEquals(a[it], b[it]) }
-    }
-    if (a is Map<*, *> && b is Map<*, *>) {
-      return a.size == b.size && a.all {
-          (b as Map<Any?, Any?>).containsKey(it.key) &&
-          deepEquals(it.value, b[it.key])
-      }
-    }
-    return a == b
-  }
-      
 }
 
 /**
@@ -126,43 +96,6 @@ enum class VadMode(val raw: Int) {
     }
   }
 }
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class AsrResult (
-  val finish: Boolean,
-  val resultCode: Long,
-  val asrResult: String,
-  val allResponse: String
-)
- {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): AsrResult {
-      val finish = pigeonVar_list[0] as Boolean
-      val resultCode = pigeonVar_list[1] as Long
-      val asrResult = pigeonVar_list[2] as String
-      val allResponse = pigeonVar_list[3] as String
-      return AsrResult(finish, resultCode, asrResult, allResponse)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      finish,
-      resultCode,
-      asrResult,
-      allResponse,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is AsrResult) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return FlutterAliyunNuiHostApiPigeonUtils.deepEquals(toList(), other.toList())  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
 private open class FlutterAliyunNuiHostApiPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -181,11 +114,6 @@ private open class FlutterAliyunNuiHostApiPigeonCodec : StandardMessageCodec() {
           VadMode.ofRaw(it.toInt())
         }
       }
-      132.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          AsrResult.fromList(it)
-        }
-      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -202,10 +130,6 @@ private open class FlutterAliyunNuiHostApiPigeonCodec : StandardMessageCodec() {
       is VadMode -> {
         stream.write(131)
         writeValue(stream, value.raw)
-      }
-      is AsrResult -> {
-        stream.write(132)
-        writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
     }

@@ -68,69 +68,6 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
-func deepEqualsFlutterAliyunNuiHostApi(_ lhs: Any?, _ rhs: Any?) -> Bool {
-  let cleanLhs = nilOrValue(lhs) as Any?
-  let cleanRhs = nilOrValue(rhs) as Any?
-  switch (cleanLhs, cleanRhs) {
-  case (nil, nil):
-    return true
-
-  case (nil, _), (_, nil):
-    return false
-
-  case is (Void, Void):
-    return true
-
-  case let (cleanLhsHashable, cleanRhsHashable) as (AnyHashable, AnyHashable):
-    return cleanLhsHashable == cleanRhsHashable
-
-  case let (cleanLhsArray, cleanRhsArray) as ([Any?], [Any?]):
-    guard cleanLhsArray.count == cleanRhsArray.count else { return false }
-    for (index, element) in cleanLhsArray.enumerated() {
-      if !deepEqualsFlutterAliyunNuiHostApi(element, cleanRhsArray[index]) {
-        return false
-      }
-    }
-    return true
-
-  case let (cleanLhsDictionary, cleanRhsDictionary) as ([AnyHashable: Any?], [AnyHashable: Any?]):
-    guard cleanLhsDictionary.count == cleanRhsDictionary.count else { return false }
-    for (key, cleanLhsValue) in cleanLhsDictionary {
-      guard cleanRhsDictionary.index(forKey: key) != nil else { return false }
-      if !deepEqualsFlutterAliyunNuiHostApi(cleanLhsValue, cleanRhsDictionary[key]!) {
-        return false
-      }
-    }
-    return true
-
-  default:
-    // Any other type shouldn't be able to be used with pigeon. File an issue if you find this to be untrue.
-    return false
-  }
-}
-
-func deepHashFlutterAliyunNuiHostApi(value: Any?, hasher: inout Hasher) {
-  if let valueList = value as? [AnyHashable] {
-     for item in valueList { deepHashFlutterAliyunNuiHostApi(value: item, hasher: &hasher) }
-     return
-  }
-
-  if let valueDict = value as? [AnyHashable: AnyHashable] {
-    for key in valueDict.keys { 
-      hasher.combine(key)
-      deepHashFlutterAliyunNuiHostApi(value: valueDict[key]!, hasher: &hasher)
-    }
-    return
-  }
-
-  if let hashableValue = value as? AnyHashable {
-    hasher.combine(hashableValue.hashValue)
-  }
-
-  return hasher.combine(String(describing: value))
-}
-
-    
 
 enum AudioState: Int {
   case stateOpen = 0
@@ -160,43 +97,6 @@ enum VadMode: Int {
   case typeOnlyKws = 9
 }
 
-/// Generated class from Pigeon that represents data sent in messages.
-struct AsrResult: Hashable {
-  var finish: Bool
-  var resultCode: Int64
-  var asrResult: String
-  var allResponse: String
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> AsrResult? {
-    let finish = pigeonVar_list[0] as! Bool
-    let resultCode = pigeonVar_list[1] as! Int64
-    let asrResult = pigeonVar_list[2] as! String
-    let allResponse = pigeonVar_list[3] as! String
-
-    return AsrResult(
-      finish: finish,
-      resultCode: resultCode,
-      asrResult: asrResult,
-      allResponse: allResponse
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      finish,
-      resultCode,
-      asrResult,
-      allResponse,
-    ]
-  }
-  static func == (lhs: AsrResult, rhs: AsrResult) -> Bool {
-    return deepEqualsFlutterAliyunNuiHostApi(lhs.toList(), rhs.toList())  }
-  func hash(into hasher: inout Hasher) {
-    deepHashFlutterAliyunNuiHostApi(value: toList(), hasher: &hasher)
-  }
-}
-
 private class FlutterAliyunNuiHostApiPigeonCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
@@ -218,8 +118,6 @@ private class FlutterAliyunNuiHostApiPigeonCodecReader: FlutterStandardReader {
         return VadMode(rawValue: enumResultAsInt)
       }
       return nil
-    case 132:
-      return AsrResult.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -237,9 +135,6 @@ private class FlutterAliyunNuiHostApiPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? VadMode {
       super.writeByte(131)
       super.writeValue(value.rawValue)
-    } else if let value = value as? AsrResult {
-      super.writeByte(132)
-      super.writeValue(value.toList())
     } else {
       super.writeValue(value)
     }
