@@ -5,6 +5,7 @@ library;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'pigeons/pigeon.dart';
 
@@ -22,7 +23,7 @@ class NuiEventData {
   final NuiCallbackEvent event;
   final int resultCode;
   final String kwsResult;
-  final AsrResult asrResult;
+  final String asrResult;
 
   @override
   String toString() {
@@ -31,7 +32,7 @@ class NuiEventData {
 }
 
 /// ASR 识别结果模型
-class AsrResult {
+class AndroidAsrResult {
   /// 是否结束
   final bool? finish;
 
@@ -44,11 +45,16 @@ class AsrResult {
   /// 全部原始响应内容
   final String? allResponse;
 
-  AsrResult({this.finish, this.resultCode, this.asrResult, this.allResponse});
+  AndroidAsrResult({
+    this.finish,
+    this.resultCode,
+    this.asrResult,
+    this.allResponse,
+  });
 
   /// 从 JSON 反序列化 AsrResult
-  factory AsrResult.fromJson(Map<String, dynamic> json) {
-    return AsrResult(
+  factory AndroidAsrResult.fromJson(Map<String, dynamic> json) {
+    return AndroidAsrResult(
       finish: json['finish'] as bool?,
       resultCode: json['resultCode'] as int?,
       asrResult: json['asrResult'] as String?,
@@ -222,7 +228,12 @@ class FlutterAliyunNui implements FlutterAliyunNuiCallback {
         ),
         resultCode: resultCode,
         kwsResult: kwsResult,
-        asrResult: AsrResult.fromJson(jsonDecode(asrResult)),
+        asrResult: Platform.isIOS
+            ? asrResult
+            : AndroidAsrResult.fromJson(
+                    jsonDecode(asrResult.isEmpty ? '{}' : asrResult),
+                  ).allResponse ??
+                  '',
       ),
     );
   }
