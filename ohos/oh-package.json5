@@ -1,0 +1,11 @@
+{
+  "name": "flutter_aliyun_nui",
+  "version": "1.0.0",
+  "description": "Flutter plugin for Aliyun NUI SDK on HarmonyOS",
+  "main": "index.ets",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@ohos/flutter_ohos": "file:./har/flutter.har",
+    "neonui": "file:./libs/neonui.har"
+  }
+}

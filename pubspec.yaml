@@ -7,8 +7,6 @@ environment:
   sdk: ^3.9.2
   flutter: '>=3.3.0'
 
-# resolution: workspace
-
 dependencies:
   flutter:
     sdk: flutter
@@ -46,6 +44,8 @@ flutter:
         package: com.example.flutter_aliyun_nui
         pluginClass: FlutterAliyunNuiPlugin
       ios:
+        pluginClass: FlutterAliyunNuiPlugin
+      ohos:
         pluginClass: FlutterAliyunNuiPlugin
 
     # -------------------

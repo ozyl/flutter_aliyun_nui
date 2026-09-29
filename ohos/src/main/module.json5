@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "flutter_aliyun_nui",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}
