@@ -168,5 +168,9 @@ export default class FlutterAliyunNuiPlugin
     }
   }
 
-  onNuiAudioRMSChanged(_val: number): void {}
+  onNuiAudioRMSChanged(_val: number): number {
+    return 0;
+  }
+
+  onNuiLogTrackCallback(_level: Constants.LogLevel, _log: string): void {}
 }
