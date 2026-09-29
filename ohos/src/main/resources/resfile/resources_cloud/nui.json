@@ -9,6 +9,9 @@
     "enable_dialog":false
   },
   "nls_config":{
+    "app_key":"default",
+    "key":"default",
+    "token":"default",
     "debug_level":4,
     "sr_format":"opus",
     "sample_rate":16000,

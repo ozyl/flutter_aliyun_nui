@@ -1,5 +1,6 @@
 import 'package:pigeon/pigeon.dart'
     show
+        ArkTSOptions,
         ConfigurePigeon,
         DartOptions,
         HostApi,
@@ -17,6 +18,9 @@ import 'package:pigeon/pigeon.dart'
     kotlinOptions: KotlinOptions(package: 'com.example.flutter_aliyun_nui'),
     swiftOut: 'ios/Classes/FlutterAliyunNuiHostApi.g.swift',
     swiftOptions: SwiftOptions(),
+    arkTSOut:
+        'ohos/src/main/ets/pigeon/FlutterAliyunNuiHostApi.g.ets',
+    arkTSOptions: ArkTSOptions(),
     dartPackageName: 'flutter_aliyun_nui',
   ),
 )

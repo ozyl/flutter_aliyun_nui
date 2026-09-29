@@ -16,7 +16,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
-  pigeon: ^25.5.0
+  # 官方 pigeon 无 arkTSOut；与 one_piece_ohos 其它 CPF 依赖同源。
+  pigeon:
+    git:
+      url: https://gitcode.com/CPF-Flutter/flutter_packages.git
+      path: packages/pigeon
+      ref: pigeon-v26.1.5-ohos-1.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
