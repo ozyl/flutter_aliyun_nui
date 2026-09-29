@@ -8,6 +8,10 @@ import { AudioState, audioStateFromRaw, logLevelFromRaw, vadModeFromRaw } from '
  */
 export default class FlutterAliyunNuiPigeonCodec extends StandardMessageCodec {
   readValueOfType(type: number, buffer: ByteBuffer): Any {
+    // 与 Dart _PigeonCodec 一致：int 走 INT64(4)
+    if (type === 4) {
+      return buffer.readInt64(true);
+    }
     if (type === 129) {
       const raw = this.readValue(buffer) as number;
       return audioStateFromRaw(raw);

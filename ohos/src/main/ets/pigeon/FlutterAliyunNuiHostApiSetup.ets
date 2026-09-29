@@ -3,6 +3,7 @@ import { BinaryMessenger } from '@ohos/flutter_ohos/src/main/ets/plugin/common/B
 import { MessageHandler } from '@ohos/flutter_ohos/src/main/ets/plugin/common/BasicMessageChannel';
 import { pigeonCodec } from './FlutterAliyunNuiPigeonCodec';
 import { LogLevel, VadMode } from './FlutterAliyunNuiEnums';
+import { pigeonMapToRecord } from './PigeonMapUtil';
 
 export interface FlutterAliyunNuiHostApi {
   initialize(params: Record<string, Object>, saveLog: boolean, logLevel: LogLevel): number;
@@ -45,7 +46,9 @@ export function setUpFlutterAliyunNuiHostApi(messenger: BinaryMessenger, api: Fl
     onMessage: (message, reply) => {
       try {
         const args = message as Object[];
-        reply.reply(wrapResult(api.initialize(args[0] as Record<string, Object>, args[1] as boolean, args[2] as LogLevel)));
+        reply.reply(wrapResult(
+          api.initialize(pigeonMapToRecord(args[0] as Object), args[1] as boolean, args[2] as LogLevel),
+        ));
       } catch (e) {
         reply.reply(wrapError(e as Error));
       }
@@ -56,7 +59,7 @@ export function setUpFlutterAliyunNuiHostApi(messenger: BinaryMessenger, api: Fl
     onMessage: (message, reply) => {
       try {
         const args = message as Object[];
-        reply.reply(wrapResult(api.setParams(args[0] as Record<string, Object>)));
+        reply.reply(wrapResult(api.setParams(pigeonMapToRecord(args[0] as Object))));
       } catch (e) {
         reply.reply(wrapError(e as Error));
       }
@@ -67,7 +70,7 @@ export function setUpFlutterAliyunNuiHostApi(messenger: BinaryMessenger, api: Fl
     onMessage: (message, reply) => {
       try {
         const args = message as Object[];
-        reply.reply(wrapResult(api.startDialog(args[0] as VadMode, args[1] as Record<string, Object>)));
+        reply.reply(wrapResult(api.startDialog(args[0] as VadMode, pigeonMapToRecord(args[1] as Object))));
       } catch (e) {
         reply.reply(wrapError(e as Error));
       }
