@@ -1,13 +1,15 @@
 # 阿里云 HarmonyOS NUI SDK
 
-从[智能语音交互 · HarmonyOS Next SDK](https://help.aliyun.com/zh/isi/user-guide/nui-sdk-for-harmonyosnext) 下载 SDK 包（如 `V1.5.016.napi.*.tar.gz`），解压后将 `entry/libs/neonui.har` 复制到本目录并命名为 `neonui.har`。
+本目录 **`neonui.har` 已随仓库提交**（厂商 SDK 二进制，不含账号凭证）。clone 后可直接编鸿蒙插件。
+
+升级 SDK 时从[官方文档](https://help.aliyun.com/zh/isi/user-guide/nui-sdk-for-harmonyosnext) 下载新包（如 `V1.5.016.napi.*.tar.gz`），替换 HAR：
 
 ```bash
-# 在 flutter_aliyun_nui 仓库根目录执行；TAR 换成本机路径
+# 在 flutter_aliyun_nui 仓库根目录；TAR 换成本机路径
 TAR=~/Downloads/V1.5.016.napi.003.010_*.tar.gz
 tar -xzf "$TAR" -O '*/entry/libs/neonui.har' > ohos/libs/neonui.har
 ```
 
-未放置 HAR 时鸿蒙工程无法编译本插件；Android / iOS 不受影响。`neonui.har` 已在 `.gitignore`，勿提交到 Git。
+同步更新 `ohos/src/main/resources/resfile/resources_cloud/`（从 HAR 内 `package/src/main/resources/resfile/resources_cloud` 解压拷贝）。
 
-插件 `ohos/src/main/resources/resfile/resources_cloud/` 已从 HAR 内资源同步一份，供初始化 `workspace` 使用。宿主 `entry` 若仍报缺少 workspace，按 `README_OHOS.md` 在宿主 `resfile` 再放一份。
+Android / iOS 仍使用各自平台 SDK，不依赖此 HAR。

@@ -2,9 +2,8 @@
 
 ## 依赖
 
-1. 按 [阿里云 HarmonyOS Next NUI SDK 文档](https://help.aliyun.com/zh/isi/user-guide/nui-sdk-for-harmonyosnext) 下载 `harmony_neonui_sdk.tar.gz`。
-2. 将 `entry/libs/neonui.har` 复制到 `ohos/libs/neonui.har`（见 `ohos/libs/README.md`）。
-3. 将 SDK 包内的 `resources_cloud`（若有）放到宿主 `entry/src/main/resources/resfile/resources_cloud`，或在初始化 JSON 里自行指定 `workspace`。
+1. `ohos/libs/neonui.har` 已随仓库提供；升级 SDK 见 `ohos/libs/README.md`。
+2. 插件内已带 `ohos/src/main/resources/resfile/resources_cloud`；宿主 `entry` 需有一份 `resfile/resources_cloud`（小来工程已拷），或在初始化 JSON 里自行指定 `workspace`。
 
 ## 与 Android / iOS 的差异
 
